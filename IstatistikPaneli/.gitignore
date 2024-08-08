@@ -1,0 +1,28 @@
+# Unity geçici dosyalar
+/Library/
+/Temp/
+/Logs/
+/obj/
+
+# Shader Cache
+/ShaderCache/
+
+# Paket yönetimi
+/Packages/
+*.csproj
+*.pidb
+*.suo
+*.user
+*.userprefs
+
+# Derleme dosyaları
+*.dll
+*.exe
+*.app
+*.apk
+*.unitypackage
+
+# Yedekleme ve geçici dosyalar
+*.swp
+*.tmp
+*.bak
