@@ -5,35 +5,39 @@ using System.Collections;
 
 public class IconManager : MonoBehaviour
 {
-    public List<Image> icons; 
-    public Image line; 
-    public float animationDuration = 0.5f; 
+    public List<Image> icons;
+    public List<GameObject> sekmePanels; // Sekme panelleri
+    public Image line;
+    public float animationDuration = 0.5f;
+    public float panelWidth = 600f; // Panellerin geniþliði
 
     private RectTransform lineRectTransform;
     private Image selectedIcon;
+    private GameObject selectedSekmePanel;
 
     void Start()
     {
         lineRectTransform = line.GetComponent<RectTransform>();
         UpdateIconList();
         HideLine();
+        HideAllSekmePanels();
     }
 
     void UpdateIconList()
     {
-        foreach (Image icon in icons)
+        for (int i = 0; i < icons.Count; i++)
         {
+            Image icon = icons[i];
             Button button = icon.GetComponent<Button>();
 
             if (button == null)
             {
-                // Eðer Button bileþeni yoksa, yeni bir tane ekle
                 button = icon.gameObject.AddComponent<Button>();
             }
 
-            // Eski dinleyicileri kaldýr ve yeni dinleyici ekle
+            int index = i; // Lambda ifadesinde kullanýlmak üzere yerel bir kopya
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => Select(icon));
+            button.onClick.AddListener(() => Select(icon, index));
         }
     }
 
@@ -44,19 +48,16 @@ public class IconManager : MonoBehaviour
             RectTransform iconRectTransform = icon.GetComponent<RectTransform>();
             if (iconRectTransform != null)
             {
-                // Çizginin yeni konumunu hesapla
                 Vector2 iconSize = iconRectTransform.rect.size;
                 Vector2 lineSize = lineRectTransform.rect.size;
 
-                // Çizginin ikonun merkezine hizalanacak þekilde konumlandýrýlmasý
-                Vector2 targetPosition = iconRectTransform.anchoredPosition;
-                targetPosition += new Vector2(0, iconSize.y / 2 - lineSize.y / 2);
+                Vector2 targetLinePosition = iconRectTransform.anchoredPosition;
+                targetLinePosition += new Vector2(0, iconSize.y / 2 - lineSize.y / 2);
 
-                // Çizginin geniþliðini ikonun geniþliðiyle eþitle
                 lineRectTransform.sizeDelta = new Vector2(iconSize.x, lineSize.y);
 
-                // Animasyon baþlat
-                StartCoroutine(MoveLine(targetPosition));
+                StartCoroutine(MoveLine(targetLinePosition));
+                line.gameObject.SetActive(true);
             }
             else
             {
@@ -64,6 +65,7 @@ public class IconManager : MonoBehaviour
             }
         }
     }
+
     void HideLine()
     {
         if (line != null)
@@ -72,41 +74,110 @@ public class IconManager : MonoBehaviour
         }
     }
 
-    public void Select(Image icon)
+    void HideAllSekmePanels()
     {
-        if (icon == null)
+        foreach (GameObject panel in sekmePanels)
         {
-            Debug.LogError("Seçilen ikon referansý eksik.");
-            return;
-        }
-
-        if (selectedIcon != icon)
-        {
-            HideLine(); 
-            ShowLine(icon); 
-            selectedIcon = icon; 
+            if (panel != null)
+            {
+                RectTransform panelRectTransform = panel.GetComponent<RectTransform>();
+                if (panelRectTransform != null)
+                {
+                    StartCoroutine(SlidePanel(panelRectTransform, new Vector2(-panelWidth, 0), animationDuration)); // Sol tarafa kaydýrarak gizle
+                }
+            }
         }
     }
 
-    IEnumerator MoveLine(Vector2 targetPosition)
+    void ShowSekmePanel(GameObject panel)
+    {
+        if (panel != null)
+        {
+            RectTransform panelRectTransform = panel.GetComponent<RectTransform>();
+            if (panelRectTransform != null)
+            {
+                panel.SetActive(true);
+                panelRectTransform.anchoredPosition = new Vector2(-panelWidth, 0); // Baþlangýçta sol tarafa kaydýrýlmýþ
+                StartCoroutine(SlidePanel(panelRectTransform, Vector2.zero, animationDuration)); // Sað tarafa kaydýrarak göster
+            }
+        }
+    }
+
+    IEnumerator SlidePanel(RectTransform panelRectTransform, Vector2 targetPosition, float duration)
+    {
+        Vector2 startPosition = panelRectTransform.anchoredPosition;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            panelRectTransform.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        panelRectTransform.anchoredPosition = targetPosition;
+    }
+
+    public void Select(Image icon, int index)
+    {
+        if (icon == null || index < 0 || index >= sekmePanels.Count)
+        {
+            Debug.LogError("Geçersiz ikon referansý veya panel dizini.");
+            return;
+        }
+
+        if (selectedIcon == icon)
+        {
+            // Ayný ikona týklanýyorsa, sekme panelini aç veya kapat
+            if (selectedSekmePanel != null)
+            {
+                bool isActive = selectedSekmePanel.activeSelf;
+                if (isActive)
+                {
+                    // Paneli gizle
+                    HideAllSekmePanels();
+                    HideLine(); // Line'ý gizle
+                    selectedIcon = null; // Seçili ikonu sýfýrla
+                    selectedSekmePanel = null; // Seçili paneli sýfýrla
+                }
+                else
+                {
+                    // Paneli göster
+                    ShowSekmePanel(selectedSekmePanel);
+                    ShowLine(selectedIcon); // Line'ý göster
+                }
+            }
+        }
+        else
+        {
+            // Yeni bir ikon seçildiyse eski ikonu gizle ve yeni ikonu seç
+            HideLine();
+            ShowLine(icon);
+            selectedIcon = icon;
+
+            // Önceki sekme panelini gizle
+            HideAllSekmePanels();
+            // Yeni sekme panelini göster
+            selectedSekmePanel = sekmePanels[index];
+            ShowSekmePanel(selectedSekmePanel);
+        }
+    }
+
+    IEnumerator MoveLine(Vector2 targetLinePosition)
     {
         if (line == null)
             yield break;
 
-        line.gameObject.SetActive(true);
-
-        Vector2 startPosition = lineRectTransform.anchoredPosition;
+        Vector2 startLinePosition = lineRectTransform.anchoredPosition;
         float elapsedTime = 0f;
 
         while (elapsedTime < animationDuration)
         {
-            // Zamaný normalize et
             float t = elapsedTime / animationDuration;
-            // Yumuþak geçiþ için Lerp kullan
-            lineRectTransform.anchoredPosition = Vector2.Lerp(startPosition, targetPosition, t);
+            lineRectTransform.anchoredPosition = Vector2.Lerp(startLinePosition, targetLinePosition, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        lineRectTransform.anchoredPosition = targetPosition;
+        lineRectTransform.anchoredPosition = targetLinePosition;
     }
 }

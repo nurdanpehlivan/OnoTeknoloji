@@ -91,6 +91,9 @@ public class FirstScripts : MonoBehaviour
         // AnaPanel'i baþlangýçta gizli yap
         AnaPanel.gameObject.SetActive(false);
 
+        // ProgressBarBackGround'ý baþlangýçta gizli yap
+        ProgressBarBackGround.gameObject.SetActive(false);
+
         // Buton için onClick olayýna Background rengini deðiþtirme fonksiyonunu ekleyin
         Button.onClick.AddListener(ToggleBackgroundColor);
     }
@@ -117,6 +120,8 @@ public class FirstScripts : MonoBehaviour
             if (ProgressBarBackGround != null)
             {
                 ProgressBarBackGround.fillAmount = normalizedAmount;
+                // ProgressBarBackGround'ý görünür hale getir
+                ProgressBarBackGround.gameObject.SetActive(true);
             }
 
             // Metinleri güncelle

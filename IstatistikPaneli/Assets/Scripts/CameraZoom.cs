@@ -1,45 +1,85 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CameraZoom : MonoBehaviour
 {
-    public float zoomSpeed = 2f; // Yakınlaşma süresi
-    public float targetDistance = 5f; // Yakınlaşmak istediğiniz mesafe
-    private Camera camera;
-    private float initialDistance;
-    private bool isZooming = false;
+    public Transform target; // Yakınlaştırılacak hedef
+    public float zoomSpeed = 1f; // Yakınlaştırma hızı
+    public float zoomDistance = 10f; // Yakınlaştırma mesafesi
+
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
 
     void Start()
     {
-        camera = Camera.main;
-        initialDistance = Vector3.Distance(camera.transform.position, transform.position);
+        // Kameranın başlangıç pozisyonunu ve rotasını sakla
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
     }
 
     public void StartZooming()
     {
-        if (!isZooming)
-        {
-            StartCoroutine(ZoomIn());
-        }
+        // Kamera yakınlaştırma işlemini başlat
+        StopAllCoroutines();
+        StartCoroutine(ZoomIn());
     }
 
-    IEnumerator ZoomIn()
+    public void ResetCameraPosition()
     {
-        isZooming = true;
+        // Kamera pozisyonunu başlangıç pozisyonuna döndür
+        StopAllCoroutines();
+        StartCoroutine(ZoomOut());
+    }
+
+    private IEnumerator ZoomIn()
+    {
+        // Yakınlaştırma işlemi
         float elapsedTime = 0f;
-        float startDistance = Vector3.Distance(camera.transform.position, transform.position);
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+        Vector3 targetPosition = target.position - target.forward * zoomDistance;
 
         while (elapsedTime < zoomSpeed)
         {
-            float newDistance = Mathf.Lerp(startDistance, targetDistance, elapsedTime / zoomSpeed);
-            camera.transform.position = transform.position + new Vector3(0, 0, -newDistance);
-            camera.transform.LookAt(transform);
+            transform.position = Vector3.Lerp(startPosition, targetPosition, (elapsedTime / zoomSpeed));
+            Vector3 directionToTarget = target.position - transform.position;
+            
+            // Yön vektörünü kontrol edin
+            if (directionToTarget.sqrMagnitude > Mathf.Epsilon)
+            {
+                transform.rotation = Quaternion.Slerp(startRotation, Quaternion.LookRotation(directionToTarget), (elapsedTime / zoomSpeed));
+            }
+
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        camera.transform.position = transform.position + new Vector3(0, 0, -targetDistance);
-        camera.transform.LookAt(transform);
-        isZooming = false;
+        transform.position = targetPosition;
+        Vector3 finalDirection = target.position - transform.position;
+        
+        // Yön vektörünü kontrol edin
+        if (finalDirection.sqrMagnitude > Mathf.Epsilon)
+        {
+            transform.rotation = Quaternion.LookRotation(finalDirection);
+        }
+    }
+
+    private IEnumerator ZoomOut()
+    {
+        // Kamera pozisyonunu başlangıç pozisyonuna döndür
+        float elapsedTime = 0f;
+        Vector3 startPosition = transform.position;
+        Quaternion startRotation = transform.rotation;
+
+        while (elapsedTime < zoomSpeed)
+        {
+            transform.position = Vector3.Lerp(startPosition, originalPosition, (elapsedTime / zoomSpeed));
+            transform.rotation = Quaternion.Slerp(startRotation, originalRotation, (elapsedTime / zoomSpeed));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
     }
 }

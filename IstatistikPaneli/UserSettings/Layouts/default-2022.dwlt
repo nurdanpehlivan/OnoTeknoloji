@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 61
+  controlID: 16
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 18
+  controlID: 17
   draggingID: 0
 --- !u!114 &7
 MonoBehaviour:
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 62
+  controlID: 98
   draggingID: 0
 --- !u!114 &10
 MonoBehaviour:
@@ -688,9 +688,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0.2096095, y: -0.014667139, z: 0.0031440314, w: 0.9776702}
   m_Size:
-    m_Target: 95.02139
+    m_Target: 37.83457
     speed: 2
-    m_Value: 95.02139
+    m_Value: 37.83457
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -856,9 +856,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 8cb80000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 30fbffff225a00008a5a00009c5a0000
+      m_SelectedIDs: b25a0000
+      m_LastClickedID: 23218
+      m_ExpandedIDs: 30fbffffd25900009e5a0000a85a0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -942,9 +942,9 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f05b0000
-    m_LastClickedID: 23536
-    m_ExpandedIDs: 00000000e45b0000ffffff7f
+    m_SelectedIDs: f45b0000
+    m_LastClickedID: 23540
+    m_ExpandedIDs: 00000000e85b0000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -972,7 +972,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e45b0000
+    m_ExpandedIDs: 00000000e85b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1003,18 +1003,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: 2c5d0000105a00000c5a00001a6e000002bd000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: CameraController
-      m_OriginalName: CameraController
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 6332
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:
@@ -1069,7 +1069,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
-  m_LastVerticalScrollValue: 348.8001
+  m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
   m_LockTracker:

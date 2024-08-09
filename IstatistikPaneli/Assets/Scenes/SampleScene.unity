@@ -607,15 +607,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1111,7 +1111,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 130, y: -349}
+  m_AnchoredPosition: {x: 160.6, y: -349}
   m_SizeDelta: {x: 178.95, y: 67.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &659970339
@@ -1379,7 +1379,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 98.998, y: -285.09}
+  m_AnchoredPosition: {x: 122.6, y: -282.93}
   m_SizeDelta: {x: 185.3, y: 44.8808}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &694821594
@@ -1943,11 +1943,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47e702ff2473f5f4faaed263e4bafc7c, type: 3}
+  m_Script: {fileID: 11500000, guid: 51a52091b6b074d41999217cc4dec317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1441162799}
-  zoomSpeed: 1
+  target: {fileID: 963194228}
+  zoomSpeed: 2
   zoomDistance: 10
 --- !u!1 &1018335298
 GameObject:
@@ -2334,11 +2334,6 @@ MonoBehaviour:
   OEEDaire: {fileID: 2108513894}
   ProgressBarBackGround: {fileID: 627885144}
   Background: {fileID: 1922612858}
---- !u!4 &1441162799 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
-  m_PrefabInstance: {fileID: 316725464}
-  m_PrefabAsset: {fileID: 0}
 --- !u!65 &1441162800
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2372,7 +2367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a52091b6b074d41999217cc4dec317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1441162799}
+  target: {fileID: 963194228}
   zoomSpeed: 1
   zoomDistance: 10
 --- !u!114 &1441162803
@@ -2387,7 +2382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c946b3de3a37548449acb23ef9a0edc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraZoom: {fileID: 1441162801}
+  cameraZoom: {fileID: 963194229}
 --- !u!1 &1451693259
 GameObject:
   m_ObjectHideFlags: 0
@@ -2565,7 +2560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 309.49, y: -282.63}
+  m_AnchoredPosition: {x: 312.2, y: -282.63}
   m_SizeDelta: {x: 185.3, y: 67.3}
   m_Pivot: {x: 0.63595206, y: 0.33159053}
 --- !u!114 &1634353080
@@ -3346,7 +3341,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 353, y: -327.43}
+  m_AnchoredPosition: {x: 367.6, y: -327.43}
   m_SizeDelta: {x: 185.3, y: 24.152}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2085296572
