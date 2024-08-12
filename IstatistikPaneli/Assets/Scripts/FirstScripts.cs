@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -16,7 +16,7 @@ public class FirstScripts : MonoBehaviour
     public float UstKalipSicakligi = 25f;
     public float AltKalipSicakligi = 15f;
     public float ivme = 0.15f;
-    public float basýnc = 0.250f;
+    public float basÄ±nc = 0.250f;
 
     public TextMeshProUGUI OcakSicakligiTxt;
     public TextMeshProUGUI OcakAgirligiTxt;
@@ -39,7 +39,7 @@ public class FirstScripts : MonoBehaviour
 
     void Start()
     {
-        // TMP bileþenlerinin atanýp atanmadýðýný kontrol edin
+        // TMP bileÅŸenlerinin atanÄ±p atanmadÄ±ÄŸÄ±nÄ± kontrol edin
         if (OcakSicakligiTxt == null || OcakAgirligiTxt == null || UstKalipSicakligiTxt == null ||
             AltKalipSicakligiTxt == null || IvmeTxt == null || BasincTxt == null || OEETxt == null ||
             SiparisKoduTxt == null || MalzemeKoduTxt == null || SiparisMiktariTxt == null)
@@ -78,24 +78,11 @@ public class FirstScripts : MonoBehaviour
             return;
         }
 
-        // Orijinal rengi sakla
-        if (Background != null)
-        {
-            Image backgroundImage = Background.GetComponent<Image>();
-            if (backgroundImage != null)
-            {
-                originalColor = backgroundImage.color;
-            }
-        }
-
-        // AnaPanel'i baþlangýçta gizli yap
+        // AnaPanel'i baÅŸlangÄ±Ã§ta gizli yap
         AnaPanel.gameObject.SetActive(false);
 
-        // ProgressBarBackGround'ý baþlangýçta gizli yap
-        ProgressBarBackGround.gameObject.SetActive(false);
-
-        // Buton için onClick olayýna Background rengini deðiþtirme fonksiyonunu ekleyin
-        Button.onClick.AddListener(ToggleBackgroundColor);
+        // Buton iÃ§in onClick olayÄ±na Background rengini beyaz yapma fonksiyonunu ekleyin
+        Button.onClick.AddListener(ChangeBackgroundColor);
     }
 
     void Update()
@@ -105,51 +92,49 @@ public class FirstScripts : MonoBehaviour
             SiparisKodu++;
             MalzemeKodu++;
 
-            // Sipariþ miktarýný güncelle
-            if (SiparisMiktari < 800) // Miktar 750'den küçükse 50 artýr
+            // SipariÅŸ miktarÄ±nÄ± gÃ¼ncelle
+            if (SiparisMiktari < 800) // Miktar 750'den kÃ¼Ã§Ã¼kse 50 artÄ±r
             {
                 SiparisMiktari += 50;
             }
             else
             {
-                SiparisMiktari = 800; // Maksimum deðer 800
+                SiparisMiktari = 800; // Maksimum deÄŸer 800
             }
 
-            // ProgressBarBackground'ýn fillAmount deðerini güncelle
+            // ProgressBarBackground'Ä±n fillAmount deÄŸerini gÃ¼ncelle
             float normalizedAmount = Mathf.InverseLerp(0f, 800f, SiparisMiktari);
             if (ProgressBarBackGround != null)
             {
                 ProgressBarBackGround.fillAmount = normalizedAmount;
-                // ProgressBarBackGround'ý görünür hale getir
-                ProgressBarBackGround.gameObject.SetActive(true);
             }
 
-            // Metinleri güncelle
-            SiparisKoduTxt.text = "Sipariþ Kodu " + SiparisKodu;
+            // Metinleri gÃ¼ncelle
+            SiparisKoduTxt.text = "SipariÅŸ Kodu " + SiparisKodu;
             MalzemeKoduTxt.text = "Malzeme Kodu \n" + MalzemeKodu;
-            SiparisMiktariTxt.text = "Sipariþ Miktarý \n" + SiparisMiktari + " adet";
+            SiparisMiktariTxt.text = "SipariÅŸ MiktarÄ± \n" + SiparisMiktari + " adet";
         }
     }
 
-    // AnaPanel'in görünürlüðünü deðiþtirir
-    public void ToggleAnaPanel()
+    private void OnMouseDown()
     {
+        Debug.Log("KÃ¼p'e tÄ±klandÄ±.");
         bool isActive = !AnaPanel.gameObject.activeSelf;
         AnaPanel.gameObject.SetActive(isActive);
 
         if (isActive)
         {
-            // AnaPanel aktif hale geldiðinde Coroutine'leri baþlat
+            // AnaPanel aktif hale geldiÄŸinde Coroutine'leri baÅŸlat
             StartCoroutine(ChangeOtherValues());
         }
         else
         {
-            // AnaPanel pasif hale geldiðinde Coroutine'leri durdur
+            // AnaPanel pasif hale geldiÄŸinde Coroutine'leri durdur
             StopAllCoroutines();
         }
     }
 
-    // Coroutine fonksiyonu diðer deðerler için
+    // Coroutine fonksiyonu diÄŸer deÄŸerler iÃ§in
     private IEnumerator ChangeOtherValues()
     {
         while (true)
@@ -166,41 +151,48 @@ public class FirstScripts : MonoBehaviour
             float randomUstKalipSicakligi = Random.Range(UstKalipSicakligi * 0.9f, UstKalipSicakligi * 1.1f);
             float randomAltKalipSicakligi = Random.Range(AltKalipSicakligi * 0.9f, AltKalipSicakligi * 1.1f);
             float randomIvme = Random.Range(ivme * 0.9f, ivme * 1.1f);
-            float randomBasinc = Random.Range(basýnc * 0.9f, basýnc * 1.1f);
+            float randomBasinc = Random.Range(basÄ±nc * 0.9f, basÄ±nc * 1.1f);
 
-            OcakSicakligiTxt.text = "Ocak Sýcaklýðý \n" + randomOcakSicakligi.ToString("F2") + " °C";
-            OcakAgirligiTxt.text = "Ocak Aðýrlýðý \n" + randomOcakAgirligi.ToString("F2") + " kg";
-            UstKalipSicakligiTxt.text = "Üst Kalýp Sýcaklýðý \n" + randomUstKalipSicakligi.ToString("F2") + " °C";
-            AltKalipSicakligiTxt.text = "Alt Kalýp Sýcaklýðý \n" + randomAltKalipSicakligi.ToString("F2") + " °C";
-            IvmeTxt.text = "Ývme \n" + randomIvme.ToString("F2") + " m/s²";
-            BasincTxt.text = "Basýnç\n " + randomBasinc.ToString("F3") + " bar";
+            Debug.Log($"Ocak SÄ±caklÄ±ÄŸÄ±: {randomOcakSicakligi}, Ocak AÄŸÄ±rlÄ±ÄŸÄ±: {randomOcakAgirligi}, Ãœst KalÄ±p SÄ±caklÄ±ÄŸÄ±: {randomUstKalipSicakligi}, Alt KalÄ±p SÄ±caklÄ±ÄŸÄ±: {randomAltKalipSicakligi}, Ä°vme: {randomIvme}, BasÄ±nÃ§: {randomBasinc}");
+
+            OcakSicakligiTxt.text = "Ocak SÄ±caklÄ±ÄŸÄ± \n" + randomOcakSicakligi.ToString("F2") + " Â°C";
+            OcakAgirligiTxt.text = "Ocak AÄŸÄ±rlÄ±ÄŸÄ± \n" + randomOcakAgirligi.ToString("F2") + " kg";
+            UstKalipSicakligiTxt.text = "Ãœst KalÄ±p SÄ±caklÄ±ÄŸÄ± \n" + randomUstKalipSicakligi.ToString("F2") + " Â°C";
+            AltKalipSicakligiTxt.text = "Alt KalÄ±p SÄ±caklÄ±ÄŸÄ± \n" + randomAltKalipSicakligi.ToString("F2") + " Â°C";
+            IvmeTxt.text = "Ä°vme \n" + randomIvme.ToString("F2") + " m/sÂ²";
+            BasincTxt.text = "BasÄ±nÃ§\n " + randomBasinc.ToString("F3") + " bar";
 
             yield return new WaitForSeconds(1);
         }
     }
 
-    // Background rengini deðiþtiren fonksiyon
-    public void ToggleBackgroundColor()
+    // Background rengini beyaz yapacak fonksiyon
+    public void ChangeBackgroundColor()
     {
+        Debug.Log("ChangeBackgroundColor fonksiyonu Ã§aÄŸrÄ±ldÄ±.");
+
+        // Background GameObject'inin rengini beyaz yap
         if (Background != null)
         {
             Image backgroundImage = Background.GetComponent<Image>();
             if (backgroundImage != null)
             {
+                // Renk deÄŸiÅŸimini kontrol et ve eski rengi geri getir
                 if (isWhite)
                 {
                     backgroundImage.color = originalColor;
+                    isWhite = false;
                 }
                 else
                 {
+                    originalColor = backgroundImage.color;
                     backgroundImage.color = Color.white;
+                    isWhite = true;
                 }
-
-                isWhite = !isWhite; // Durumu tersine çevir
             }
             else
             {
-                Debug.LogError("Background GameObject'inde Image bileþeni bulunamadý.");
+                Debug.LogError("Background GameObject'inde Image bileÅŸeni bulunamadÄ±.");
             }
         }
     }

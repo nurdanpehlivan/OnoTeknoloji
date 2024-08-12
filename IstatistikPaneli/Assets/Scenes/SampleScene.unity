@@ -607,27 +607,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 20
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 20
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalScale.z
-      value: 20
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1
+      value: 2.32
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -16.8
+      value: -1.06
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 115.9
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1947,7 +1947,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 963194228}
-  zoomSpeed: 2
+  zoomSpeed: 1
   zoomDistance: 10
 --- !u!1 &1018335298
 GameObject:
@@ -2383,6 +2383,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraZoom: {fileID: 963194229}
+  robotTarget: {fileID: 1441162805}
+  AnaPanel: {fileID: 1922612858}
+--- !u!4 &1441162805 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5bdb726035f40324ab266e87033db9a8, type: 3}
+  m_PrefabInstance: {fileID: 316725464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1451693259
 GameObject:
   m_ObjectHideFlags: 0
@@ -2891,7 +2898,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.86}
+  m_AnchoredPosition: {x: 1.68, y: -0.86}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!64 &1735584590

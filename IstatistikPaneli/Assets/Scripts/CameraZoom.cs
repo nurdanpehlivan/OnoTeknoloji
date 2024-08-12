@@ -1,14 +1,16 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class CameraZoom : MonoBehaviour
 {
     public Transform target; // Yakınlaştırılacak hedef
-    public float zoomSpeed = 1f; // Yakınlaştırma hızı
+    public float zoomSpeed = 1f; // Yakınlaştırma süresi
     public float zoomDistance = 10f; // Yakınlaştırma mesafesi
 
     private Vector3 originalPosition;
     private Quaternion originalRotation;
+
+    private RobotButtonHandler robotButtonHandler; // RobotButtonHandler referansı
 
     void Start()
     {
@@ -17,11 +19,12 @@ public class CameraZoom : MonoBehaviour
         originalRotation = transform.rotation;
     }
 
-    public void StartZooming()
+    public void StartZooming(Vector3 targetPosition, Quaternion targetRotation, RobotButtonHandler handler)
     {
+        robotButtonHandler = handler;
         // Kamera yakınlaştırma işlemini başlat
         StopAllCoroutines();
-        StartCoroutine(ZoomIn());
+        StartCoroutine(ZoomIn(targetPosition, targetRotation));
     }
 
     public void ResetCameraPosition()
@@ -31,36 +34,30 @@ public class CameraZoom : MonoBehaviour
         StartCoroutine(ZoomOut());
     }
 
-    private IEnumerator ZoomIn()
+    private IEnumerator ZoomIn(Vector3 targetPosition, Quaternion targetRotation)
     {
         // Yakınlaştırma işlemi
         float elapsedTime = 0f;
         Vector3 startPosition = transform.position;
         Quaternion startRotation = transform.rotation;
-        Vector3 targetPosition = target.position - target.forward * zoomDistance;
 
         while (elapsedTime < zoomSpeed)
         {
-            transform.position = Vector3.Lerp(startPosition, targetPosition, (elapsedTime / zoomSpeed));
-            Vector3 directionToTarget = target.position - transform.position;
-            
-            // Yön vektörünü kontrol edin
-            if (directionToTarget.sqrMagnitude > Mathf.Epsilon)
-            {
-                transform.rotation = Quaternion.Slerp(startRotation, Quaternion.LookRotation(directionToTarget), (elapsedTime / zoomSpeed));
-            }
-
+            float t = elapsedTime / zoomSpeed;
+            transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+            transform.rotation = Quaternion.Slerp(startRotation, targetRotation, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        // Hedef pozisyona ve rotaya ulaş
         transform.position = targetPosition;
-        Vector3 finalDirection = target.position - transform.position;
-        
-        // Yön vektörünü kontrol edin
-        if (finalDirection.sqrMagnitude > Mathf.Epsilon)
+        transform.rotation = targetRotation;
+
+        // AnaPanel'i ekrana getir
+        if (robotButtonHandler != null)
         {
-            transform.rotation = Quaternion.LookRotation(finalDirection);
+            robotButtonHandler.ShowAnaPanel();
         }
     }
 
@@ -73,12 +70,14 @@ public class CameraZoom : MonoBehaviour
 
         while (elapsedTime < zoomSpeed)
         {
-            transform.position = Vector3.Lerp(startPosition, originalPosition, (elapsedTime / zoomSpeed));
-            transform.rotation = Quaternion.Slerp(startRotation, originalRotation, (elapsedTime / zoomSpeed));
+            float t = elapsedTime / zoomSpeed;
+            transform.position = Vector3.Lerp(startPosition, originalPosition, t);
+            transform.rotation = Quaternion.Slerp(startRotation, originalRotation, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        // Başlangıç pozisyonuna ve rotaya ulaş
         transform.position = originalPosition;
         transform.rotation = originalRotation;
     }
