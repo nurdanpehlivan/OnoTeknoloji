@@ -34,85 +34,40 @@ public class FirstScripts : MonoBehaviour
     public Image OEEDaire;
     public Image ProgressBarBackGround;
     public GameObject Background;
+
     private bool isWhite = false;
     private Color originalColor;
+    private Animator animator;
 
     void Start()
     {
         // TMP bileşenlerinin atanıp atanmadığını kontrol edin
-        if (OcakSicakligiTxt == null || OcakAgirligiTxt == null || UstKalipSicakligiTxt == null ||
-            AltKalipSicakligiTxt == null || IvmeTxt == null || BasincTxt == null || OEETxt == null ||
-            SiparisKoduTxt == null || MalzemeKoduTxt == null || SiparisMiktariTxt == null)
-        {
-            Debug.LogError("One or more TextMeshProUGUI components are not assigned in the Inspector.");
-            return;
-        }
-
-        if (AnaPanel == null)
-        {
-            Debug.LogError("AnaPanel is not assigned in the Inspector.");
-            return;
-        }
-
-        if (Button == null)
-        {
-            Debug.LogError("Button is not assigned in the Inspector.");
-            return;
-        }
-
-        if (OEEDaire == null)
-        {
-            Debug.LogError("OEEDaire is not assigned in the Inspector.");
-            return;
-        }
-
-        if (ProgressBarBackGround == null)
-        {
-            Debug.LogError("ProgressBarBackGround is not assigned in the Inspector.");
-            return;
-        }
-
-        if (Background == null)
-        {
-            Debug.LogError("Background is not assigned in the Inspector.");
-            return;
-        }
+        ValidateReferences();
 
         // AnaPanel'i başlangıçta gizli yap
         AnaPanel.gameObject.SetActive(false);
 
         // Buton için onClick olayına Background rengini beyaz yapma fonksiyonunu ekleyin
         Button.onClick.AddListener(ChangeBackgroundColor);
+
+        // Animator bileşenini al
+        animator = AnaPanel.GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("Animator component is missing on the AnaPanel GameObject.");
+        }
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.X))
         {
-            SiparisKodu++;
-            MalzemeKodu++;
+            UpdateOrderDetails();
+        }
 
-            // Sipariş miktarını güncelle
-            if (SiparisMiktari < 800) // Miktar 750'den küçükse 50 artır
-            {
-                SiparisMiktari += 50;
-            }
-            else
-            {
-                SiparisMiktari = 800; // Maksimum değer 800
-            }
-
-            // ProgressBarBackground'ın fillAmount değerini güncelle
-            float normalizedAmount = Mathf.InverseLerp(0f, 800f, SiparisMiktari);
-            if (ProgressBarBackGround != null)
-            {
-                ProgressBarBackGround.fillAmount = normalizedAmount;
-            }
-
-            // Metinleri güncelle
-            SiparisKoduTxt.text = "Sipariş Kodu " + SiparisKodu;
-            MalzemeKoduTxt.text = "Malzeme Kodu \n" + MalzemeKodu;
-            SiparisMiktariTxt.text = "Sipariş Miktarı \n" + SiparisMiktari + " adet";
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            TriggerAnimation();
         }
     }
 
@@ -134,66 +89,99 @@ public class FirstScripts : MonoBehaviour
         }
     }
 
-    // Coroutine fonksiyonu diğer değerler için
     private IEnumerator ChangeOtherValues()
     {
         while (true)
         {
-            OEE = Random.Range(75f, 86f);
-            OEEDaire.fillAmount = OEE / 100f;
-            if (OEETxt != null)
-            {
-                OEETxt.text = OEE.ToString("F2") + "%";
-            }
-
-            float randomOcakSicakligi = Random.Range(OcakSicakligi * 0.9f, OcakSicakligi * 1.1f);
-            float randomOcakAgirligi = Random.Range(OcakAgirligi * 0.9f, OcakAgirligi * 1.1f);
-            float randomUstKalipSicakligi = Random.Range(UstKalipSicakligi * 0.9f, UstKalipSicakligi * 1.1f);
-            float randomAltKalipSicakligi = Random.Range(AltKalipSicakligi * 0.9f, AltKalipSicakligi * 1.1f);
-            float randomIvme = Random.Range(ivme * 0.9f, ivme * 1.1f);
-            float randomBasinc = Random.Range(basınc * 0.9f, basınc * 1.1f);
-
-            Debug.Log($"Ocak Sıcaklığı: {randomOcakSicakligi}, Ocak Ağırlığı: {randomOcakAgirligi}, Üst Kalıp Sıcaklığı: {randomUstKalipSicakligi}, Alt Kalıp Sıcaklığı: {randomAltKalipSicakligi}, İvme: {randomIvme}, Basınç: {randomBasinc}");
-
-            OcakSicakligiTxt.text = "Ocak Sıcaklığı \n" + randomOcakSicakligi.ToString("F2") + " °C";
-            OcakAgirligiTxt.text = "Ocak Ağırlığı \n" + randomOcakAgirligi.ToString("F2") + " kg";
-            UstKalipSicakligiTxt.text = "Üst Kalıp Sıcaklığı \n" + randomUstKalipSicakligi.ToString("F2") + " °C";
-            AltKalipSicakligiTxt.text = "Alt Kalıp Sıcaklığı \n" + randomAltKalipSicakligi.ToString("F2") + " °C";
-            IvmeTxt.text = "İvme \n" + randomIvme.ToString("F2") + " m/s²";
-            BasincTxt.text = "Basınç\n " + randomBasinc.ToString("F3") + " bar";
-
-            yield return new WaitForSeconds(1);
+            UpdateDynamicValues();
+            yield return new WaitForSeconds(1f);
         }
     }
 
-    // Background rengini beyaz yapacak fonksiyon
-    public void ChangeBackgroundColor()
+    private void ChangeBackgroundColor()
     {
-        Debug.Log("ChangeBackgroundColor fonksiyonu çağrıldı.");
-
-        // Background GameObject'inin rengini beyaz yap
         if (Background != null)
         {
-            Image backgroundImage = Background.GetComponent<Image>();
-            if (backgroundImage != null)
+            Image bgImage = Background.GetComponent<Image>();
+            if (bgImage != null)
             {
-                // Renk değişimini kontrol et ve eski rengi geri getir
-                if (isWhite)
-                {
-                    backgroundImage.color = originalColor;
-                    isWhite = false;
-                }
-                else
-                {
-                    originalColor = backgroundImage.color;
-                    backgroundImage.color = Color.white;
-                    isWhite = true;
-                }
-            }
-            else
-            {
-                Debug.LogError("Background GameObject'inde Image bileşeni bulunamadı.");
+                bgImage.color = isWhite ? originalColor : Color.white;
+                isWhite = !isWhite;
             }
         }
+    }
+
+    private void ValidateReferences()
+    {
+        if (OcakSicakligiTxt == null || OcakAgirligiTxt == null || UstKalipSicakligiTxt == null ||
+            AltKalipSicakligiTxt == null || IvmeTxt == null || BasincTxt == null || OEETxt == null ||
+            SiparisKoduTxt == null || MalzemeKoduTxt == null || SiparisMiktariTxt == null)
+        {
+            Debug.LogError("One or more TextMeshProUGUI components are not assigned in the Inspector.");
+        }
+
+        if (AnaPanel == null)
+        {
+            Debug.LogError("AnaPanel is not assigned in the Inspector.");
+        }
+
+        if (Button == null)
+        {
+            Debug.LogError("Button is not assigned in the Inspector.");
+        }
+
+        if (OEEDaire == null)
+        {
+            Debug.LogError("OEEDaire is not assigned in the Inspector.");
+        }
+
+        if (ProgressBarBackGround == null)
+        {
+            Debug.LogError("ProgressBarBackGround is not assigned in the Inspector.");
+        }
+
+        if (Background == null)
+        {
+            Debug.LogError("Background is not assigned in the Inspector.");
+        }
+    }
+
+    private void UpdateOrderDetails()
+    {
+        SiparisKodu++;
+        MalzemeKodu++;
+        SiparisMiktari = Mathf.Min(SiparisMiktari + 50, 800);
+
+        if (ProgressBarBackGround != null)
+        {
+            float normalizedAmount = Mathf.InverseLerp(0f, 800f, SiparisMiktari);
+            ProgressBarBackGround.fillAmount = normalizedAmount;
+        }
+
+        SiparisKoduTxt.text = $"Sipariş Kodu {SiparisKodu}";
+        MalzemeKoduTxt.text = $"Malzeme Kodu \n{MalzemeKodu}";
+        SiparisMiktariTxt.text = $"Sipariş Miktarı \n{SiparisMiktari} adet";
+    }
+
+    private void TriggerAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Rotate");
+        }
+    }
+
+    private void UpdateDynamicValues()
+    {
+        OEE = Random.Range(75f, 86f);
+        OEEDaire.fillAmount = OEE / 100f;
+        OEETxt.text = $"{OEE:F2}%";
+
+        OcakSicakligiTxt.text = $"Ocak Sıcaklığı \n{Random.Range(OcakSicakligi * 0.9f, OcakSicakligi * 1.1f):F2} °C";
+        OcakAgirligiTxt.text = $"Ocak Ağırlığı \n{Random.Range(OcakAgirligi * 0.9f, OcakAgirligi * 1.1f):F2} kg";
+        UstKalipSicakligiTxt.text = $"Üst Kalıp Sıcaklığı \n{Random.Range(UstKalipSicakligi * 0.9f, UstKalipSicakligi * 1.1f):F2} °C";
+        AltKalipSicakligiTxt.text = $"Alt Kalıp Sıcaklığı \n{Random.Range(AltKalipSicakligi * 0.9f, AltKalipSicakligi * 1.1f):F2} °C";
+        IvmeTxt.text = $"İvme \n{Random.Range(ivme * 0.9f, ivme * 1.1f):F2} m/s²";
+        BasincTxt.text = $"Basınç \n{Random.Range(basınc * 0.9f, basınc * 1.1f):F2} bar";
     }
 }
